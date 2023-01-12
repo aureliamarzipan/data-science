@@ -1,0 +1,108 @@
+---
+title: "Reading for January 13"
+author: "Aurelia Ponzio"
+date: "2023-01-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This assigment included reading 3.4, 3.5, and 3.5.1 in https://r4ds.had.co.nz/data-visualisation.html
+
+The exercises are from 3.5.1
+
+We'll begin by using tidyverse.
+
+``` {r}
+#| label: load-packages
+#| warning: false
+#| message: false
+library(tidyverse)
+```
+
+#### 1. What happens if you facet on a continuous variable?
+
+Here we have a normal plot with faceting on one axis using `class`, 
+a discrete variable.
+
+``` {r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  facet_wrap(~class, nrow=2)
+```
+
+As you can see, it works. Let's try switching out `class` for a continuous
+variable, say `cty`.
+
+``` {r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  facet_wrap(~cty, nrow=2)
+```
+
+This also works, but creates an odd looking plot. 
+The data is faceted based on intervals that allow the plot to cover 
+the whole data set.
+
+#### 2. What do the empty cells in plot with `facet_grid(drv ~ cyl)` mean? How do they relate to this plot?
+
+``` {r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = drv, y = cyl)) +
+  facet_grid(drv ~ cyl)
+```
+
+The empty cells mean that there is no data there. 
+There are no 4 wheel drive vehicles with 5 cylinders and
+no read wheel drive vehicles with 4 or 5 cylinders.
+
+### 3. What plots does the following code make? What does `.` do?
+
+``` {r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  facet_grid(drv ~ .)
+
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  facet_grid(. ~ cyl)
+```
+
+The code makes two plots comparing `hwy` (highway mileage per gallon) and 
+`displ` is engine displacement, in liters.
+
+The difference is that they use two different facets. 
+The first is filtered by `drv` on the y axis 
+and the second is filtered by `cyl` on the x axis.
+
+The `.` when used as an argument of `facet_grid()` allows you to create a 
+facet grid with only one facet rather than having to use `facet_wrap()`
+
+### 4. Take the first faceted plot in this section. What are the advantages to using faceting instead of the colour aesthetic? What are the disadvantages? How might the balance change if you had a larger dataset?
+
+``` {r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_wrap(~ class, nrow = 2)
+```
+
+Faceting rather than color aesthetic allows for clearer separation of data.
+Conversely, it's more difficult to compare data points easily.
+With a larger data set, faceting will become more useful as you can seperate 
+out overlapping data points that are part of different facets.
+
+### 5. Read `?facet_wrap`. What does `nrow` do? What does `ncol` do? What other options control the layout of the individual panels? Why doesn’t `facet_grid()` have `nrow` and `ncol` arguments?
+`nrow` and `ncol` are the number of rows and columns respectively.
+`as.table` will change tha layout of a facet to be like a table. 
+`dir` changes the direction.
+
+`facet_grid()` doesn't have `nrow` and `ncol` because it's a grid 
+and the number of rows and columns is automatically based on the data set 
+and is usually used with discrete variables. It's best for when all the 
+combinations of two discrete variables exist in the data set.
+
+### 6. When using facet_grid() you should usually put the variable with more unique levels in the columns. Why?
+This variable with more unique levels should be put in the column to 
+allow greater distinction in the data.
