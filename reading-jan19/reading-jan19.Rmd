@@ -1,0 +1,68 @@
+---
+title: "Reading for January 19"
+author: "Aurelia Ponzio"
+date: "2023-01-17"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This assigment included reading 3.6 in 
+https://r4ds.had.co.nz/data-visualisation.html
+
+The exercises are from 3.6.1
+
+We'll begin by using tidyverse.
+
+``` {r}
+#| label: load-packages
+#| warning: false
+#| message: false
+library(tidyverse)
+```
+
+#### 1. What geom would you use to draw a line chart? A boxplot? A histogram? An area chart?
+For a line chart, one would use  `geom_line()`. For a boxplot, `geom_boxplot()`,
+for a histogram `geom_histogram()`, and for an area chart `geom_area()`.
+
+#### 2. Run this code in your head and predict what the output will look like. Then, run the code in R and check your predictions.
+``` {r}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = drv)) + 
+  geom_point() + 
+  geom_smooth(se = FALSE)
+```
+I expect this to create a plot using data from the mpg dataset.
+It will create a scatter plot and a smooth line fitted to the data.
+The plot will have `displ` on the x axis, `hwy` on the y axis, 
+and will be colored according to `drv`.
+The smooth plot will have no confidence intervals.
+
+After running it, it looks how I expected. I was initially unsure how 
+`geom_smooth()` would handle color but three lines makes perfect sense.
+
+#### 3. What does `show.legend = FALSE` do? What happens if you remove it? Why do you think I used it earlier in the chapter?
+`show.legend = FALSE` removes the legend, 
+the section explaining what each color/symbol means.
+It was used earlier so all three plots would fit nicely.
+
+#### 4. What does the `se` argument to `geom_smooth()` do?
+If true, it shows confidence intervals. If false, it doesn't.
+
+#### 5. Will these two graphs look different? Why/why not?
+``` {r}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point() + 
+  geom_smooth()
+
+ggplot() + 
+  geom_point(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_smooth(data = mpg, mapping = aes(x = displ, y = hwy))
+```
+
+They'll look the same. The first is just the second but written better.
+
+After viewing them, I was correct
+
+
