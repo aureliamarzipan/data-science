@@ -29,10 +29,12 @@ for a histogram `geom_histogram()`, and for an area chart `geom_area()`.
 
 #### 2. Run this code in your head and predict what the output will look like. Then, run the code in R and check your predictions.
 ``` {r}
+#| message: false
 ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = drv)) + 
   geom_point() + 
   geom_smooth(se = FALSE)
 ```
+
 I expect this to create a plot using data from the mpg dataset.
 It will create a scatter plot and a smooth line fitted to the data.
 The plot will have `displ` on the x axis, `hwy` on the y axis, 
@@ -52,6 +54,7 @@ If true, it shows confidence intervals. If false, it doesn't.
 
 #### 5. Will these two graphs look different? Why/why not?
 ``` {r}
+#| message: false
 ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
   geom_point() + 
   geom_smooth()
@@ -65,4 +68,30 @@ They'll look the same. The first is just the second but written better.
 
 After viewing them, I was correct
 
+#### 6. Recreate the R code necessary to generate the following graphs.
+``` {r}
+#| message: false
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point() + 
+  geom_smooth(se = FALSE)
 
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point() + 
+  geom_smooth(aes(group = drv), se = FALSE)
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = drv)) + 
+  geom_point() + 
+  geom_smooth(se = FALSE)
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point(aes(color = drv)) + 
+  geom_smooth(se = FALSE)
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point(aes(color = drv)) + 
+  geom_smooth(se = FALSE, aes(linetype = drv))
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point(stroke = 4, color = "white") +
+  geom_point(stroke = 2, aes(color = drv))
+```
