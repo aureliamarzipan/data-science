@@ -5,29 +5,38 @@ date: "2023-01-19"
 output: html_document
 ---
 
+This work is based on the questions found at https://datasciencebox.org/course-materials/hw-instructions/hw-02/hw-02-airbnb-edi.html
+
 ## Load packages and data
 
 ```{r load-packages, message = FALSE}
 library(tidyverse)
 library(dsbox)
+library(ggridges)
 ```
 
 ## Exercises
 
 ### Exercise 1
 
-Remove this text, and add your answer for Exercise 1 here.
+The dataset has the number of rows displayed below
+```{r}
+nrow(edibnb)
+```
 
 ### Exercise 2
 
-Remove this text, and add your answer for Exercise 2 here.
+Each row found by running `View(edibnb)` represents an individual air bnb listing.
 
 ### Exercise 3
 
-Remove this text, and add your answer for Exercise 3 here.
+I've wrapped the histogram because it would take up far too much space if 
+they were stacked in a column.
 
 ```{r prices-neighbourhoods}
-# remove this comment and add the code for Exercise 3 here
+ggplot(data = edibnb, mapping = aes(x = price)) +
+  geom_histogram(binwidth = 25) +
+  facet_wrap(~neighbourhood)
 ```
 
 ### Exercise 4
@@ -35,11 +44,17 @@ Remove this text, and add your answer for Exercise 3 here.
 Remove this text, and add your answer for Exercise 4 here.
 
 ```{r top-5-median}
-# remove this comment and add the code for Exercise 4 here
-```
+top5 = edibnb %>%
+  filter(!is.na(price)) %>%
+  group_by(neighbourhood) %>% 
+  summarise(med_price = median(price)) %>%
+  top_n(n = 5, med_price) %>%
+  arrange(desc(med_price)) %>%
+  print()
 
-```{r top-5-median-plot}
-# remove this comment and add the code for Exercise 4 here
+
+  #ggplot(data = edibnb, mapping = aes(x = price, y = neighbourhood, fill = neighbourhood, color = top5$neighbourhood)) +
+   # geom_density_ridges(alpha = 0.5)
 ```
 
 ```{r top-5-median-summary-stats}
