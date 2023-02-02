@@ -1,0 +1,91 @@
+---
+title: "template"
+author: "Aurelia Ponzio"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This assignment included chapter 5 of R for Data Science. 
+The reading can be found at https://r4ds.had.co.nz/transform.html
+
+As always, we begin with tidyverse.
+We'll use nycflights13 for our dataset.
+``` {r}
+#| label: load-packages
+#| warning: false
+#| message: false
+library(tidyverse)
+library(nycflights13)
+```
+
+
+## 5.2.4 Finding rows with filter
+
+### 1. Find all flights that
+  Had an arrival delay of two or more hours
+  Flew to Houston (IAH or HOU)
+  Were operated by United, American, or Delta
+  Departed in summer (July, August, and September)
+  Arrived more than two hours late, but didn’t leave late
+  Were delayed by at least an hour, but made up over 30 minutes in flight
+  Departed between midnight and 6am (inclusive)
+
+``` {r}
+# arrival delay >= 2 hours
+flights %>%
+  filter(arr_delay >= 120)
+
+# flew to Houston
+flights %>%
+  filter(dest == "IAH" | dest == "HOU")
+
+# united, american, or delta
+flights %>%
+  filter(carrier == "UA" | carrier == "AA" | carrier == "DL")
+
+# departed in summer
+flights %>%
+  filter(month == 7 | month == 8 | month == 9)
+
+# more than two hours late when on time
+flights %>%
+  filter(dep_delay <= 0 & arr_delay > 120)
+
+# delayed by an hour but made up over 30 mins
+flights %>%
+  filter(dep_delay >= 60 & arr_delay <= 30)
+
+# departed between midnight and six am
+flights %>%
+  filter(hour >= 0 & hour <= 6)
+```
+
+### 2. Another useful dplyr filtering helper is between(). What does it do? Can you use it to simplify the code needed to answer the previous challenges?
+According to the docs it is a way to find if a numeric value falls in a range.
+It can be used to simplify the following questions:
+``` {r}
+# departed in summer
+flights %>%
+  filter(between(month, 7, 9))
+
+# departed between midnight and six am
+flights %>%
+  filter(between(hour, 0, 6))
+```
+
+### 3. How many flights have a missing dep_time? What other variables are missing? What might these rows represent?
+``` {r}
+flights %>%
+  filter(is.na(dep_time)) %>%
+  count()
+```
+
+### 4. Why is NA ^ 0 not missing? Why is NA | TRUE not missing? Why is FALSE & NA not missing? Can you figure out the general rule? (NA * 0 is a tricky counterexample!)
+
+
+
+
