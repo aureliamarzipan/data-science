@@ -1,5 +1,5 @@
 ---
-title: "template"
+title: "Data Transformation Readings"
 author: "Aurelia Ponzio"
 date: "`r Sys.Date()`"
 output: html_document
@@ -78,14 +78,25 @@ flights %>%
 ```
 
 ### 3. How many flights have a missing dep_time? What other variables are missing? What might these rows represent?
+According to the below code, 8255 flights are missing their departure time.
+These are flights that never took off.
 ``` {r}
 flights %>%
   filter(is.na(dep_time)) %>%
   count()
 ```
 
+Looking at the data frame, other missing variables include dep_delay, 
+arr_time, arr_delay, tailnum, and air_time. 
+Other than air_time, all of these can be accounted for by the plane either
+not taking off or not landing.
+Missing tailnums are probably flights that were registered but never given planes.
+
 ### 4. Why is NA ^ 0 not missing? Why is NA | TRUE not missing? Why is FALSE & NA not missing? Can you figure out the general rule? (NA * 0 is a tricky counterexample!)
-
-
+NA ^ 0 isn't missing because R assumes that any number to the 0th is 1.
+NA | TRUE isn't missing because the the second option is true so it will evaluate to true regardless of the value for NA.
+FALSE & NA isn't missing for the same reason as above but flipped. Anything & FALSE will
+evaluate to false.
+The general rule is that NA stands in for some unknown so if the expression can be evaluated without that unknown it will be.
 
 

@@ -11,9 +11,9 @@
 
 <meta name="author" content="Aurelia Ponzio" />
 
-<meta name="date" content="2023-01-31" />
+<meta name="date" content="2023-02-02" />
 
-<title>template</title>
+<title>Data Transformation Readings</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -350,9 +350,9 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">template</h1>
+<h1 class="title toc-ignore">Data Transformation Readings</h1>
 <h4 class="author">Aurelia Ponzio</h4>
-<h4 class="date">2023-01-31</h4>
+<h4 class="date">2023-02-02</h4>
 
 </div>
 
@@ -563,6 +563,8 @@ flights %&gt;%
 <div id="how-many-flights-have-a-missing-dep_time-what-other-variables-are-missing-what-might-these-rows-represent" class="section level3">
 <h3>3. How many flights have a missing dep_time? What other variables
 are missing? What might these rows represent?</h3>
+<p>According to the below code, 8255 flights are missing their departure
+time. These are flights that never took off.</p>
 <pre class="r"><code>flights %&gt;%
   filter(is.na(dep_time)) %&gt;%
   count()</code></pre>
@@ -570,11 +572,23 @@ are missing? What might these rows represent?</h3>
 ##       n
 ##   &lt;int&gt;
 ## 1  8255</code></pre>
+<p>Looking at the data frame, other missing variables include dep_delay,
+arr_time, arr_delay, tailnum, and air_time. Other than air_time, all of
+these can be accounted for by the plane either not taking off or not
+landing. Missing tailnums are probably flights that were registered but
+never given planes.</p>
 </div>
 <div id="why-is-na-0-not-missing-why-is-na-true-not-missing-why-is-false-na-not-missing-can-you-figure-out-the-general-rule-na-0-is-a-tricky-counterexample" class="section level3">
 <h3>4. Why is NA ^ 0 not missing? Why is NA | TRUE not missing? Why is
 FALSE &amp; NA not missing? Can you figure out the general rule? (NA * 0
 is a tricky counterexample!)</h3>
+<p>NA ^ 0 isn’t missing because R assumes that any number to the 0th is
+1. NA | TRUE isn’t missing because the the second option is true so it
+will evaluate to true regardless of the value for NA. FALSE &amp; NA
+isn’t missing for the same reason as above but flipped. Anything &amp;
+FALSE will evaluate to false. The general rule is that NA stands in for
+some unknown so if the expression can be evaluated without that unknown
+it will be.</p>
 </div>
 </div>
 
