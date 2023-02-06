@@ -100,3 +100,127 @@ evaluate to false.
 The general rule is that NA stands in for some unknown so if the expression can be evaluated without that unknown it will be.
 
 
+## 5.3.1 Arrange rows with Arrange
+
+### 1. How could you use arrange() to sort all missing values to the start? (Hint: use is.na()).
+``` {r}
+flights %>%
+   arrange(!is.na(flights))
+```
+
+### 2. Sort flights to find the most delayed flights. Find the flights that left earliest.
+``` {r}
+# earliest 
+flights %>%
+  arrange(dep_delay)
+
+# most delayed
+flights %>%
+  arrange(desc(dep_delay))
+```
+
+### 3. Sort flights to find the fastest (highest speed) flights.
+``` {r}
+flights %>%
+  arrange(distance / air_time)
+```
+
+### 4. Which flights travelled the farthest? Which travelled the shortest?
+``` {r}
+# farthest
+flights %>%
+  arrange(distance)
+
+#shortest
+flights %>%  
+  arrange(desc(distance))
+```
+
+## 5.4.1 Select columns with select()
+### Brainstorm as many ways as possible to select dep_time, dep_delay, arr_time, and arr_delay from flights.
+List them explicitly, list everything else explicitly, create a regex that matches,
+use starts_with or ends_with.
+
+### What happens if you include the name of a variable multiple times in a select() call?
+``` {r}
+flights %>%
+  select(month, day, month, day)
+```
+It ignores the second call.
+
+### What does the any_of() function do? Why might it be helpful in conjunction with this vector?
+``` {r}
+vars <- c("year", "month", "day", "dep_delay", "arr_delay")
+flights %>%
+  select(any_of(vars))
+```
+Lets you provide an easy list and select based on it.
+
+### Does the result of running the following code surprise you? How do the select helpers deal with case by default? How can you change that default?
+``` {r}
+select(flights, contains("TIME"))
+```
+I am a bit suprised it ignores case by default
+This can be changed with `ignore.case = FALSE`
+``` {r}
+select(flights, contains("TIME", ignore.case = FALSE))
+```
+
+## 5.5.2 Adding new variables with mutate
+
+### 1.Currently dep_time and sched_dep_time are convenient to look at, but hard to compute with because they’re not really continuous numbers. Convert them to a more convenient representation of number of minutes since midnight.
+``` {r}
+mutate(flights,
+  dep_time,
+  hour = dep_time %/% 100,
+  minute = dep_time %% 100
+)
+```
+
+### 2. Compare air_time with arr_time - dep_time. What do you expect to see? What do you see? What do you need to do to fix it?
+Air time is wheels up to wheels down, departure time to arrival time is gate to gate.
+This can't really be "fixed" but it's something to remain aware of.
+We can calculate taxi time if we want.
+
+### 3. Compare dep_time, sched_dep_time, and dep_delay. How would you expect those three numbers to be related?
+Departure time minus scheduled depature time should equal depature delay.
+
+### 4. Find the 10 most delayed flights using a ranking function. How do you want to handle ties? Carefully read the documentation for min_rank().
+``` {r}
+flights %>% 
+  mutate(rank = min_rank(-dep_delay)) %>%
+  select(dep_delay, rank) %>%
+  arrange(rank)
+```
+
+
+### 5. What does 1:3 + 1:10 return? Why?
+``` {}
+1:3 + 1:10
+```
+```
+Warning message:
+In 1:3 + 1:10 :
+  longer object length is not a multiple of shorter object length
+```
+
+This gives an error, because the two different frames are seperate lengths.
+It doesn't know how to add them.
+
+### 6. What trigonometric functions does R provide?
+The following:
+```
+cos(x)
+sin(x)
+tan(x)
+
+acos(x)
+asin(x)
+atan(x)
+atan2(y, x)
+
+cospi(x)
+sinpi(x)
+tanpi(x)
+```
+

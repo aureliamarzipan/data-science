@@ -11,7 +11,7 @@
 
 <meta name="author" content="Aurelia Ponzio" />
 
-<meta name="date" content="2023-02-02" />
+<meta name="date" content="2023-02-06" />
 
 <title>Data Transformation Readings</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">Data Transformation Readings</h1>
 <h4 class="author">Aurelia Ponzio</h4>
-<h4 class="date">2023-02-02</h4>
+<h4 class="date">2023-02-06</h4>
 
 </div>
 
@@ -589,6 +589,310 @@ isn’t missing for the same reason as above but flipped. Anything &amp;
 FALSE will evaluate to false. The general rule is that NA stands in for
 some unknown so if the expression can be evaluated without that unknown
 it will be.</p>
+</div>
+</div>
+<div id="arrange-rows-with-arrange" class="section level2">
+<h2>5.3.1 Arrange rows with Arrange</h2>
+<div id="how-could-you-use-arrange-to-sort-all-missing-values-to-the-start-hint-use-is.na." class="section level3">
+<h3>1. How could you use arrange() to sort all missing values to the
+start? (Hint: use is.na()).</h3>
+<pre class="r"><code>flights %&gt;%
+   arrange(!is.na(flights))</code></pre>
+<pre><code>## # A tibble: 336,776 × 19
+##     year month   day dep_time sched_de…¹ dep_d…² arr_t…³ sched…⁴ arr_d…⁵ carrier
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;      &lt;int&gt;   &lt;dbl&gt;   &lt;int&gt;   &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;  
+##  1  2013     1     2       NA       1545      NA      NA    1910      NA AA     
+##  2  2013     1     2       NA       1601      NA      NA    1735      NA UA     
+##  3  2013     1     3       NA        857      NA      NA    1209      NA UA     
+##  4  2013     1     3       NA        645      NA      NA     952      NA UA     
+##  5  2013     1     4       NA        845      NA      NA    1015      NA 9E     
+##  6  2013     1     4       NA       1830      NA      NA    2044      NA 9E     
+##  7  2013     1     5       NA        840      NA      NA    1001      NA 9E     
+##  8  2013     1     7       NA        820      NA      NA     958      NA 9E     
+##  9  2013     1     8       NA       1645      NA      NA    1838      NA US     
+## 10  2013     1     9       NA        755      NA      NA    1012      NA 9E     
+## # … with 336,766 more rows, 9 more variables: flight &lt;int&gt;, tailnum &lt;chr&gt;,
+## #   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,
+## #   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;, and abbreviated variable names
+## #   ¹​sched_dep_time, ²​dep_delay, ³​arr_time, ⁴​sched_arr_time, ⁵​arr_delay</code></pre>
+</div>
+<div id="sort-flights-to-find-the-most-delayed-flights.-find-the-flights-that-left-earliest." class="section level3">
+<h3>2. Sort flights to find the most delayed flights. Find the flights
+that left earliest.</h3>
+<pre class="r"><code># earliest 
+flights %&gt;%
+  arrange(dep_delay)</code></pre>
+<pre><code>## # A tibble: 336,776 × 19
+##     year month   day dep_time sched_de…¹ dep_d…² arr_t…³ sched…⁴ arr_d…⁵ carrier
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;      &lt;int&gt;   &lt;dbl&gt;   &lt;int&gt;   &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;  
+##  1  2013    12     7     2040       2123     -43      40    2352      48 B6     
+##  2  2013     2     3     2022       2055     -33    2240    2338     -58 DL     
+##  3  2013    11    10     1408       1440     -32    1549    1559     -10 EV     
+##  4  2013     1    11     1900       1930     -30    2233    2243     -10 DL     
+##  5  2013     1    29     1703       1730     -27    1947    1957     -10 F9     
+##  6  2013     8     9      729        755     -26    1002     955       7 MQ     
+##  7  2013    10    23     1907       1932     -25    2143    2143       0 EV     
+##  8  2013     3    30     2030       2055     -25    2213    2250     -37 MQ     
+##  9  2013     3     2     1431       1455     -24    1601    1631     -30 9E     
+## 10  2013     5     5      934        958     -24    1225    1309     -44 B6     
+## # … with 336,766 more rows, 9 more variables: flight &lt;int&gt;, tailnum &lt;chr&gt;,
+## #   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,
+## #   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;, and abbreviated variable names
+## #   ¹​sched_dep_time, ²​dep_delay, ³​arr_time, ⁴​sched_arr_time, ⁵​arr_delay</code></pre>
+<pre class="r"><code># most delayed
+flights %&gt;%
+  arrange(desc(dep_delay))</code></pre>
+<pre><code>## # A tibble: 336,776 × 19
+##     year month   day dep_time sched_de…¹ dep_d…² arr_t…³ sched…⁴ arr_d…⁵ carrier
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;      &lt;int&gt;   &lt;dbl&gt;   &lt;int&gt;   &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;  
+##  1  2013     1     9      641        900    1301    1242    1530    1272 HA     
+##  2  2013     6    15     1432       1935    1137    1607    2120    1127 MQ     
+##  3  2013     1    10     1121       1635    1126    1239    1810    1109 MQ     
+##  4  2013     9    20     1139       1845    1014    1457    2210    1007 AA     
+##  5  2013     7    22      845       1600    1005    1044    1815     989 MQ     
+##  6  2013     4    10     1100       1900     960    1342    2211     931 DL     
+##  7  2013     3    17     2321        810     911     135    1020     915 DL     
+##  8  2013     6    27      959       1900     899    1236    2226     850 DL     
+##  9  2013     7    22     2257        759     898     121    1026     895 DL     
+## 10  2013    12     5      756       1700     896    1058    2020     878 AA     
+## # … with 336,766 more rows, 9 more variables: flight &lt;int&gt;, tailnum &lt;chr&gt;,
+## #   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,
+## #   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;, and abbreviated variable names
+## #   ¹​sched_dep_time, ²​dep_delay, ³​arr_time, ⁴​sched_arr_time, ⁵​arr_delay</code></pre>
+</div>
+<div id="sort-flights-to-find-the-fastest-highest-speed-flights." class="section level3">
+<h3>3. Sort flights to find the fastest (highest speed) flights.</h3>
+<pre class="r"><code>flights %&gt;%
+  arrange(distance / air_time)</code></pre>
+<pre><code>## # A tibble: 336,776 × 19
+##     year month   day dep_time sched_de…¹ dep_d…² arr_t…³ sched…⁴ arr_d…⁵ carrier
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;      &lt;int&gt;   &lt;dbl&gt;   &lt;int&gt;   &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;  
+##  1  2013     1    28     1917       1825      52    2118    1935     103 US     
+##  2  2013     6    29      755        800      -5    1035     909      86 B6     
+##  3  2013     8    28      932        940      -8    1116    1051      25 9E     
+##  4  2013     1    30     1037        955      42    1221    1100      81 9E     
+##  5  2013    11    27      556        600      -4     727     658      29 US     
+##  6  2013     5    21      558        600      -2     721     657      24 US     
+##  7  2013    12     9     1540       1535       5    1720    1656      24 US     
+##  8  2013     6    10     1356       1300      56    1646    1414     152 US     
+##  9  2013     7    28     1322       1325      -3    1612    1432     100 US     
+## 10  2013     4    11     1349       1345       4    1542    1453      49 9E     
+## # … with 336,766 more rows, 9 more variables: flight &lt;int&gt;, tailnum &lt;chr&gt;,
+## #   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,
+## #   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;, and abbreviated variable names
+## #   ¹​sched_dep_time, ²​dep_delay, ³​arr_time, ⁴​sched_arr_time, ⁵​arr_delay</code></pre>
+</div>
+<div id="which-flights-travelled-the-farthest-which-travelled-the-shortest" class="section level3">
+<h3>4. Which flights travelled the farthest? Which travelled the
+shortest?</h3>
+<pre class="r"><code># farthest
+flights %&gt;%
+  arrange(distance)</code></pre>
+<pre><code>## # A tibble: 336,776 × 19
+##     year month   day dep_time sched_de…¹ dep_d…² arr_t…³ sched…⁴ arr_d…⁵ carrier
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;      &lt;int&gt;   &lt;dbl&gt;   &lt;int&gt;   &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;  
+##  1  2013     7    27       NA        106      NA      NA     245      NA US     
+##  2  2013     1     3     2127       2129      -2    2222    2224      -2 EV     
+##  3  2013     1     4     1240       1200      40    1333    1306      27 EV     
+##  4  2013     1     4     1829       1615     134    1937    1721     136 EV     
+##  5  2013     1     4     2128       2129      -1    2218    2224      -6 EV     
+##  6  2013     1     5     1155       1200      -5    1241    1306     -25 EV     
+##  7  2013     1     6     2125       2129      -4    2224    2224       0 EV     
+##  8  2013     1     7     2124       2129      -5    2212    2224     -12 EV     
+##  9  2013     1     8     2127       2130      -3    2304    2225      39 EV     
+## 10  2013     1     9     2126       2129      -3    2217    2224      -7 EV     
+## # … with 336,766 more rows, 9 more variables: flight &lt;int&gt;, tailnum &lt;chr&gt;,
+## #   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,
+## #   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;, and abbreviated variable names
+## #   ¹​sched_dep_time, ²​dep_delay, ³​arr_time, ⁴​sched_arr_time, ⁵​arr_delay</code></pre>
+<pre class="r"><code>#shortest
+flights %&gt;%  
+  arrange(desc(distance))</code></pre>
+<pre><code>## # A tibble: 336,776 × 19
+##     year month   day dep_time sched_de…¹ dep_d…² arr_t…³ sched…⁴ arr_d…⁵ carrier
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;      &lt;int&gt;   &lt;dbl&gt;   &lt;int&gt;   &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;  
+##  1  2013     1     1      857        900      -3    1516    1530     -14 HA     
+##  2  2013     1     2      909        900       9    1525    1530      -5 HA     
+##  3  2013     1     3      914        900      14    1504    1530     -26 HA     
+##  4  2013     1     4      900        900       0    1516    1530     -14 HA     
+##  5  2013     1     5      858        900      -2    1519    1530     -11 HA     
+##  6  2013     1     6     1019        900      79    1558    1530      28 HA     
+##  7  2013     1     7     1042        900     102    1620    1530      50 HA     
+##  8  2013     1     8      901        900       1    1504    1530     -26 HA     
+##  9  2013     1     9      641        900    1301    1242    1530    1272 HA     
+## 10  2013     1    10      859        900      -1    1449    1530     -41 HA     
+## # … with 336,766 more rows, 9 more variables: flight &lt;int&gt;, tailnum &lt;chr&gt;,
+## #   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,
+## #   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;, and abbreviated variable names
+## #   ¹​sched_dep_time, ²​dep_delay, ³​arr_time, ⁴​sched_arr_time, ⁵​arr_delay</code></pre>
+</div>
+</div>
+<div id="select-columns-with-select" class="section level2">
+<h2>5.4.1 Select columns with select()</h2>
+<div id="brainstorm-as-many-ways-as-possible-to-select-dep_time-dep_delay-arr_time-and-arr_delay-from-flights." class="section level3">
+<h3>Brainstorm as many ways as possible to select dep_time, dep_delay,
+arr_time, and arr_delay from flights.</h3>
+<p>List them explicitly, list everything else explicitly, create a regex
+that matches, use starts_with or ends_with.</p>
+</div>
+<div id="what-happens-if-you-include-the-name-of-a-variable-multiple-times-in-a-select-call" class="section level3">
+<h3>What happens if you include the name of a variable multiple times in
+a select() call?</h3>
+<pre class="r"><code>flights %&gt;%
+  select(month, day, month, day)</code></pre>
+<pre><code>## # A tibble: 336,776 × 2
+##    month   day
+##    &lt;int&gt; &lt;int&gt;
+##  1     1     1
+##  2     1     1
+##  3     1     1
+##  4     1     1
+##  5     1     1
+##  6     1     1
+##  7     1     1
+##  8     1     1
+##  9     1     1
+## 10     1     1
+## # … with 336,766 more rows</code></pre>
+<p>It ignores the second call.</p>
+</div>
+<div id="what-does-the-any_of-function-do-why-might-it-be-helpful-in-conjunction-with-this-vector" class="section level3">
+<h3>What does the any_of() function do? Why might it be helpful in
+conjunction with this vector?</h3>
+<pre class="r"><code>vars &lt;- c(&quot;year&quot;, &quot;month&quot;, &quot;day&quot;, &quot;dep_delay&quot;, &quot;arr_delay&quot;)
+flights %&gt;%
+  select(any_of(vars))</code></pre>
+<pre><code>## # A tibble: 336,776 × 5
+##     year month   day dep_delay arr_delay
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+##  1  2013     1     1         2        11
+##  2  2013     1     1         4        20
+##  3  2013     1     1         2        33
+##  4  2013     1     1        -1       -18
+##  5  2013     1     1        -6       -25
+##  6  2013     1     1        -4        12
+##  7  2013     1     1        -5        19
+##  8  2013     1     1        -3       -14
+##  9  2013     1     1        -3        -8
+## 10  2013     1     1        -2         8
+## # … with 336,766 more rows</code></pre>
+<p>Lets you provide an easy list and select based on it.</p>
+</div>
+<div id="does-the-result-of-running-the-following-code-surprise-you-how-do-the-select-helpers-deal-with-case-by-default-how-can-you-change-that-default" class="section level3">
+<h3>Does the result of running the following code surprise you? How do
+the select helpers deal with case by default? How can you change that
+default?</h3>
+<pre class="r"><code>select(flights, contains(&quot;TIME&quot;))</code></pre>
+<pre><code>## # A tibble: 336,776 × 6
+##    dep_time sched_dep_time arr_time sched_arr_time air_time time_hour          
+##       &lt;int&gt;          &lt;int&gt;    &lt;int&gt;          &lt;int&gt;    &lt;dbl&gt; &lt;dttm&gt;             
+##  1      517            515      830            819      227 2013-01-01 05:00:00
+##  2      533            529      850            830      227 2013-01-01 05:00:00
+##  3      542            540      923            850      160 2013-01-01 05:00:00
+##  4      544            545     1004           1022      183 2013-01-01 05:00:00
+##  5      554            600      812            837      116 2013-01-01 06:00:00
+##  6      554            558      740            728      150 2013-01-01 05:00:00
+##  7      555            600      913            854      158 2013-01-01 06:00:00
+##  8      557            600      709            723       53 2013-01-01 06:00:00
+##  9      557            600      838            846      140 2013-01-01 06:00:00
+## 10      558            600      753            745      138 2013-01-01 06:00:00
+## # … with 336,766 more rows</code></pre>
+<p>I am a bit suprised it ignores case by default This can be changed
+with <code>ignore.case = FALSE</code></p>
+<pre class="r"><code>select(flights, contains(&quot;TIME&quot;, ignore.case = FALSE))</code></pre>
+<pre><code>## # A tibble: 336,776 × 0</code></pre>
+</div>
+</div>
+<div id="adding-new-variables-with-mutate" class="section level2">
+<h2>5.5.2 Adding new variables with mutate</h2>
+<div id="currently-dep_time-and-sched_dep_time-are-convenient-to-look-at-but-hard-to-compute-with-because-theyre-not-really-continuous-numbers.-convert-them-to-a-more-convenient-representation-of-number-of-minutes-since-midnight." class="section level3">
+<h3>1.Currently dep_time and sched_dep_time are convenient to look at,
+but hard to compute with because they’re not really continuous numbers.
+Convert them to a more convenient representation of number of minutes
+since midnight.</h3>
+<pre class="r"><code>mutate(flights,
+  dep_time,
+  hour = dep_time %/% 100,
+  minute = dep_time %% 100
+)</code></pre>
+<pre><code>## # A tibble: 336,776 × 19
+##     year month   day dep_time sched_de…¹ dep_d…² arr_t…³ sched…⁴ arr_d…⁵ carrier
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;      &lt;int&gt;   &lt;dbl&gt;   &lt;int&gt;   &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;  
+##  1  2013     1     1      517        515       2     830     819      11 UA     
+##  2  2013     1     1      533        529       4     850     830      20 UA     
+##  3  2013     1     1      542        540       2     923     850      33 AA     
+##  4  2013     1     1      544        545      -1    1004    1022     -18 B6     
+##  5  2013     1     1      554        600      -6     812     837     -25 DL     
+##  6  2013     1     1      554        558      -4     740     728      12 UA     
+##  7  2013     1     1      555        600      -5     913     854      19 B6     
+##  8  2013     1     1      557        600      -3     709     723     -14 EV     
+##  9  2013     1     1      557        600      -3     838     846      -8 B6     
+## 10  2013     1     1      558        600      -2     753     745       8 AA     
+## # … with 336,766 more rows, 9 more variables: flight &lt;int&gt;, tailnum &lt;chr&gt;,
+## #   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,
+## #   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;, and abbreviated variable names
+## #   ¹​sched_dep_time, ²​dep_delay, ³​arr_time, ⁴​sched_arr_time, ⁵​arr_delay</code></pre>
+</div>
+<div id="compare-air_time-with-arr_time---dep_time.-what-do-you-expect-to-see-what-do-you-see-what-do-you-need-to-do-to-fix-it" class="section level3">
+<h3>2. Compare air_time with arr_time - dep_time. What do you expect to
+see? What do you see? What do you need to do to fix it?</h3>
+<p>Air time is wheels up to wheels down, departure time to arrival time
+is gate to gate. This can’t really be “fixed” but it’s something to
+remain aware of. We can calculate taxi time if we want.</p>
+</div>
+<div id="compare-dep_time-sched_dep_time-and-dep_delay.-how-would-you-expect-those-three-numbers-to-be-related" class="section level3">
+<h3>3. Compare dep_time, sched_dep_time, and dep_delay. How would you
+expect those three numbers to be related?</h3>
+<p>Departure time minus scheduled depature time should equal depature
+delay.</p>
+</div>
+<div id="find-the-10-most-delayed-flights-using-a-ranking-function.-how-do-you-want-to-handle-ties-carefully-read-the-documentation-for-min_rank." class="section level3">
+<h3>4. Find the 10 most delayed flights using a ranking function. How do
+you want to handle ties? Carefully read the documentation for
+min_rank().</h3>
+<pre class="r"><code>flights %&gt;% 
+  mutate(rank = min_rank(-dep_delay)) %&gt;%
+  select(dep_delay, rank) %&gt;%
+  arrange(rank)</code></pre>
+<pre><code>## # A tibble: 336,776 × 2
+##    dep_delay  rank
+##        &lt;dbl&gt; &lt;int&gt;
+##  1      1301     1
+##  2      1137     2
+##  3      1126     3
+##  4      1014     4
+##  5      1005     5
+##  6       960     6
+##  7       911     7
+##  8       899     8
+##  9       898     9
+## 10       896    10
+## # … with 336,766 more rows</code></pre>
+</div>
+<div id="what-does-13-110-return-why" class="section level3">
+<h3>5. What does 1:3 + 1:10 return? Why?</h3>
+<pre><code>1:3 + 1:10</code></pre>
+<pre><code>Warning message:
+In 1:3 + 1:10 :
+  longer object length is not a multiple of shorter object length</code></pre>
+<p>This gives an error, because the two different frames are seperate
+lengths. It doesn’t know how to add them.</p>
+</div>
+<div id="what-trigonometric-functions-does-r-provide" class="section level3">
+<h3>6. What trigonometric functions does R provide?</h3>
+<p>The following:</p>
+<pre><code>cos(x)
+sin(x)
+tan(x)
+
+acos(x)
+asin(x)
+atan(x)
+atan2(y, x)
+
+cospi(x)
+sinpi(x)
+tanpi(x)</code></pre>
 </div>
 </div>
 
