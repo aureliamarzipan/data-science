@@ -11,7 +11,7 @@
 
 <meta name="author" content="Aurelia Ponzio" />
 
-<meta name="date" content="2023-02-06" />
+<meta name="date" content="2023-02-13" />
 
 <title>Data Transformation Readings</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">Data Transformation Readings</h1>
 <h4 class="author">Aurelia Ponzio</h4>
-<h4 class="date">2023-02-06</h4>
+<h4 class="date">2023-02-13</h4>
 
 </div>
 
@@ -893,6 +893,55 @@ atan2(y, x)
 cospi(x)
 sinpi(x)
 tanpi(x)</code></pre>
+</div>
+</div>
+<div id="grouped-summaries-with-summarise" class="section level2">
+<h2>5.6.7 Grouped summaries with summarise()</h2>
+<div id="brainstorm-at-least-5-different-ways-to-assess-the-typical-delay-characteristics-of-a-group-of-flights." class="section level3">
+<h3>Brainstorm at least 5 different ways to assess the typical delay
+characteristics of a group of flights.</h3>
+<p>Group by arrival delay, departure delay, and average of the two. Take
+median/mode of each</p>
+</div>
+<div id="come-up-with-another-approach-that-will-give-you-the-same-output-as-not_cancelled-countdest-and-not_cancelled-counttailnum-wt-distance-without-using-count." class="section level3">
+<h3>Come up with another approach that will give you the same output as
+not_cancelled %&gt;% count(dest) and not_cancelled %&gt;% count(tailnum,
+wt = distance) (without using count()).</h3>
+<p>We can use sum(!is.na(x))</p>
+</div>
+<div id="our-definition-of-cancelled-flights-is.nadep_delay-is.naarr_delay-is-slightly-suboptimal.-why-which-is-the-most-important-column" class="section level3">
+<h3>Our definition of cancelled flights (is.na(dep_delay) |
+is.na(arr_delay) ) is slightly suboptimal. Why? Which is the most
+important column?</h3>
+<p>No departure delay only is the best definition, because it’s possible
+for flights to have a depature delay but no arrival delay and not have
+been cancelled due to a crash.</p>
+</div>
+<div id="look-at-the-number-of-cancelled-flights-per-day.-is-there-a-pattern-is-the-proportion-of-cancelled-flights-related-to-the-average-delay" class="section level3">
+<h3>Look at the number of cancelled flights per day. Is there a pattern?
+Is the proportion of cancelled flights related to the average
+delay?</h3>
+<pre class="r"><code>flights %&gt;%
+  group_by(month, day) %&gt;%
+  filter(is.na(dep_delay)) %&gt;%
+  summarise()</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;month&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre><code>## # A tibble: 358 × 2
+## # Groups:   month [12]
+##    month   day
+##    &lt;int&gt; &lt;int&gt;
+##  1     1     1
+##  2     1     2
+##  3     1     3
+##  4     1     4
+##  5     1     5
+##  6     1     6
+##  7     1     7
+##  8     1     8
+##  9     1     9
+## 10     1    10
+## # … with 348 more rows</code></pre>
 </div>
 </div>
 
