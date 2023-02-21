@@ -224,3 +224,22 @@ sinpi(x)
 tanpi(x)
 ```
 
+## 5.6.7 Grouped summaries with summarise()
+
+### Brainstorm at least 5 different ways to assess the typical delay characteristics of a group of flights.
+Group by arrival delay, departure delay, and average of the two. 
+Take median/mode of each
+
+### Come up with another approach that will give you the same output as not_cancelled %>% count(dest) and not_cancelled %>% count(tailnum, wt = distance) (without using count()).
+We can use sum(!is.na(x))
+
+### Our definition of cancelled flights (is.na(dep_delay) | is.na(arr_delay) ) is slightly suboptimal. Why? Which is the most important column?
+No departure delay only is the best definition, 
+because it's possible for flights to have a depature delay but no arrival 
+delay and not have been cancelled due to a crash.
+
+### Look at the number of cancelled flights per day. Is there a pattern? Is the proportion of cancelled flights related to the average delay?
+``` {r}
+flights %>%
+  group_by(month, day) %>%
+```
