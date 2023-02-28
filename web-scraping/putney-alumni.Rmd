@@ -60,5 +60,6 @@ putney_alums <- tibble(
 putney_alums <- mutate(putney_alums, link = paste0("https://en.wikipedia.org", putney_alums$link))
 
 putney_alums
-
 ```
+
+Now that we have a list of Putney alumni, that's all we're doing because scraping wikipedia is very hard.
