@@ -1,0 +1,108 @@
+---
+title: "Ultimate Guitar Scraping"
+author: "Aurelia Ponzio"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+As always, we begin with our packages
+``` {r}
+#| label: load-packages
+#| warning: false
+#| message: false
+library(tidyverse)
+library(rvest)
+library(stringr)
+library(robotstxt)
+library(RSelenium)
+```
+
+Our goal today is to scrape the top tabs from https://ultimate-guitar.com.
+Firstly, we need to confirm that we're allowed to do this.
+``` {r}
+paths_allowed("https://ultimate-guitar.com")
+```
+
+Next, we need to read the webpage and convert it to our useful format. This is a bit complicated due to needed to fool the page into thinking we're a browser.
+
+``` {r, echo = TRUE, warning = FALSE, message = FALSE}
+selCommand <- wdman::selenium(jvmargs = c("-Dwebdriver.chrome.verboseLogging=true"), retcommand = TRUE)
+Sys.sleep(2)
+system(selCommand, wait = FALSE, minimized = TRUE)
+Sys.sleep(2)
+remdr <- remoteDriver(port = 4567L, browserName = "firefox")
+Sys.sleep(10)
+remdr$open()
+
+# navigate to the link
+remdr$navigate(url = "https://www.ultimate-guitar.com/explore?order=hitstotal_desc&page=1")
+
+# read page source
+pgSrc <- remdr$getPageSource()
+page <- read_html(pgSrc[[1]])
+class(page)
+
+# shut things down
+remdr$close()
+```
+
+Now, we extract each of our data points. For this, we will be collecting the artist's name, a link to the artist's page, the song's name, a link to the song, the song's rating, the number of ratings, the number of times the song has been viewed, and the type of the document. Once we've extracted this information, we create a tibble with it.
+
+``` {r}
+artist_names <- page %>%
+  html_nodes(".GLVQi :nth-child(1)") %>%
+  html_text()
+#artist_names
+
+artist_links <- page %>%
+  html_nodes(".GLVQi :nth-child(1)") %>%
+  html_attr("href")
+#artist_links
+
+song_names <- page %>%
+  html_nodes(".HT3w5") %>%
+  html_text()
+#song_names
+
+song_links <- page %>%
+  html_nodes(".HT3w5") %>%
+  html_attr("href")
+#song_links
+
+# ratings <- page %>%
+#   html_nodes(".DSnE7") %>%
+#   html_text()
+
+num_ratingses <- page %>%
+  html_nodes(".djFV9") %>%
+  html_text()
+#num_ratingses
+
+num_hitses <- page %>%
+  html_nodes(".UpKH8") %>%
+  html_text()
+#num_hitses
+
+types <- page %>%
+  html_nodes(".PdXKy") %>%
+  html_text()
+#types
+
+top_50 <- tibble(
+  artist_name = artist_names,
+  song_name = song_names,
+  song_link = song_links,
+  # rating = ratings,
+  num_ratings = num_ratingses,
+  num_hits = num_hitses,
+  type = types
+)
+
+top_50
+```
+
+And boom, a data set! I would've liked to do more with it, but it was tricky enough to get.
